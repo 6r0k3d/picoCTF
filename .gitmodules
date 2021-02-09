@@ -1,0 +1,3 @@
+[submodule "problems/ctf-problems"]
+	path = problems/ctf-problems
+	url = https://github.com/6r0k3d/ctf-problems.git
