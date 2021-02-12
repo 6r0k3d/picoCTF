@@ -14,6 +14,7 @@ from .schemas import (
     update_password_req,
     user_extdata_req,
     user_htb_req,
+    user_htb_token_req,
 )
 
 ns = Namespace(
@@ -260,6 +261,8 @@ class UserDataExport(Resource):
         )
 
 
+# TODO: Combine these 2 routes to a single class
+# Not sure if that can be done
 @ns.route("/set_htb_id")
 class SetHTBProfile(Resource):
     """Add Hack the Box Profile ID to User data."""
@@ -273,11 +276,11 @@ class SetHTBProfile(Resource):
     @ns.expect(user_htb_req)
     def post(self):
         req = user_htb_req.parse_args(strict=True)
-        res = api.user.add_htb_id(req["user_name"], req["htb_id"])
+        res = api.user.set_htb_id(req["user_name"], req["htb_id"])
         return jsonify(res)
 
 @ns.route("/get_htb_id/<string:user_name>")
-class SetHTBProfile(Resource):
+class GetHTBProfile(Resource):
     """Add Hack the Box Profile ID to User data."""
 
     @check_csrf
@@ -291,4 +294,33 @@ class SetHTBProfile(Resource):
             raise PicoException("Missing user_name", 400)
 
         res = api.user.get_htb_id(user_name)
+        return jsonify(res)
+
+@ns.route("/htb_token")
+class SetHTBToken(Resource):
+    """Get/Set Hack the Box Profile ID to User data."""
+
+    @check_csrf
+    @require_login
+    @ns.response(200, "Success")
+    @ns.response(401, "Not logged in")
+    @ns.response(403, "CSRF token invalid")
+    @ns.response(404, "Username not found")
+    def get(self):
+        """Get Hack the Box Profile ID to User data."""
+        res = api.user.get_user()
+        return res["htb_token"]
+
+
+    @check_csrf
+    @require_bot
+    @ns.response(200, "Success")
+    @ns.response(401, "Not logged in")
+    @ns.response(403, "CSRF token invalid")
+    @ns.response(404, "Username not found")
+    @ns.expect(user_htb_token_req)
+    def post(self):
+        """Set Hack the Box Profile ID to User data."""
+        req = user_htb_token_req.parse_args(strict=True)
+        res = api.user.set_htb_token(req["user_name"], req["token"])
         return jsonify(res)

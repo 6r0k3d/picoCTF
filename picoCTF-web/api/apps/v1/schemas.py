@@ -699,6 +699,25 @@ user_htb_req.add_argument(
     error="HTB Profile ID Number is required",
 )
 
+# Set Hack The Box Token
+user_htb_token_req= reqparse.RequestParser()
+user_htb_token_req.add_argument(
+    "user_name",
+    required=True,
+    type=str,
+    location="json",
+    help="Username",
+    error="Username is required",
+)
+user_htb_token_req.add_argument(
+    "token",
+    required=True,
+    type=int,
+    location="json",
+    help="Token",
+    error="Token is required",
+)
+
 # Email verification request
 email_verification_req = reqparse.RequestParser()
 email_verification_req.add_argument(

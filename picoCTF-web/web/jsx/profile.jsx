@@ -372,6 +372,44 @@ Also, to avoid confusion on the scoreboard, you may not create a team that share
   }
 });
 
+// Get HTB 2FA Challenge Key
+const LoadHTBTwoFactor = React.createClass({
+
+  getInitialState() {
+    console.log("getting state");
+    return {
+      token: ""
+    };
+  },
+
+  componentWillMount() {
+
+    apiCall("GET", "/api/v1/user/htb_token").done(data => {
+        console.log(typeof(data));
+        console.log(data);
+        this.setState({token: data});
+      })
+     .fail(jqXHR =>
+        apiNotify({ status: 0, message: jqXHR.responseJSON.message })
+      );
+  },
+
+  render() {
+    return (
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h3 className="panel-title">HTB Challenge Token</h3>
+        </div>
+        <div className="panel-body">
+          <div className="col-md-10 col-md-offset-1">
+            <h4>{this.state.token}</h4>
+          </div>
+        </div>
+      </div>
+    );
+  }
+})
+
 // Begin classroom panel. TODO: convert to react components
 
 const load_group_info = () =>
@@ -451,6 +489,11 @@ $(function() {
   $("#disable-account-form").on("submit", disableAccount);
   $("#download-data-form").on("submit", downloadData);
 
+  console.log('hello');
+  ReactDOM.render(
+    <LoadHTBTwoFactor />,
+    document.getElementById("htb-two-factor")
+  );
   ReactDOM.render(
     <TeamManagementForm />,
     document.getElementById("team-management")

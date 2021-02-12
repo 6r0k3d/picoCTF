@@ -705,7 +705,7 @@ def can_leave_team(uid):
     return True
 
 @log_action
-def add_htb_id(user_name, htb_id):
+def set_htb_id(user_name, htb_id):
     """
     Note: This could be done with def update_extdata, however
     update_extdata looks up the logged in user. This request
@@ -753,3 +753,26 @@ def get_htb_id(user_name):
         raise PicoException("Missing HTB ID", 409)
 
     return {"success": True, "htb_id": user["htb_id"]}
+
+def set_htb_token(user_name, token):
+    """
+    Note: This could be done with def update_extdata, however
+    update_extdata looks up the logged in user. This request
+    is being performed by a challenge at the request of a user,
+    so the user lookup there would fail.
+
+    Associate a users Hack the Box ID with their User data.
+
+    Args:
+        user_name: the user who's profile is updated
+        htb_id: the HTB id for the user
+    """
+    user = get_user(name=user_name)
+
+    if not user:
+        raise PicoException("Could not find user", 400)
+
+    db = api.db.get_conn()
+    db.users.update_one({"uid": user["uid"]}, {"$set": {"htb_token": token}})
+
+    return {"success": True}
