@@ -173,10 +173,6 @@ def add_user(params, batch_registration=False):
             firstname: user's first name
             lastname: user's first name
             email: user's email
-            country: 2-digit country code
-            affiliation: user's affiliation
-            usertype: "student", "teacher" or other
-            demo: arbitrary dict of demographic data
             gid (optional): group registration
             rid (optional): registration id
         batch_registration: Allows bypass of recaptcha in class batch regs
@@ -205,7 +201,7 @@ def add_user(params, batch_registration=False):
     # If rid is specified and gid and email match,
     # get teacher status from registration token.
     # Additionally, invited users are automatically validated.
-    user_is_teacher = params["usertype"] == "teacher"
+    #user_is_teacher = params["usertype"] == "teacher"
     user_was_invited = False
     join_group_as_teacher = False
     if params.get("rid", None):
@@ -243,7 +239,6 @@ def add_user(params, batch_registration=False):
         {
             "team_name": params["username"],
             "password": api.common.hash_password("-"),
-            "affiliation": params["affiliation"],
         }
     )
     db.teams.update_one({"tid": tid}, {"$set": {"size": 1}})
@@ -265,10 +260,6 @@ def add_user(params, batch_registration=False):
         "email": params["email"],
         "password_hash": api.common.hash_password(params["password"]),
         "tid": tid,
-        "usertype": params["usertype"],
-        "country": params["country"],
-        "demo": params["demo"],
-        "teacher": user_is_teacher,
         "admin": user_is_admin,
         "challenge": False,
         "disabled": False,
@@ -277,6 +268,7 @@ def add_user(params, batch_registration=False):
         "completed_minigames": [],
         "unlocked_walkthroughs": [],
         "tokens": 0,
+        "htb_token" : 000000,
     }
     db.users.insert_one(user)
 

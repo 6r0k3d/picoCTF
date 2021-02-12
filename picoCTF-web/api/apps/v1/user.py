@@ -127,7 +127,7 @@ class AuthorizationResponse(Resource):
             user = api.user.get_user()
 
         if user:
-            for role in ["teacher", "admin"]:
+            for role in ["admin"]:
                 authorizations[role] = user[role]
 
         if authorizations[requested_role] is True:

@@ -37,30 +37,6 @@ class UserList(Resource):
 
         # Do additional validation on request, due to RequestParser
         # limitations (@TODO handle w/ Marshmallow)
-        if "age" not in req["demo"] or req["demo"]["age"] not in ["13-17", "18+"]:
-            raise PicoException(
-                "'age' must be specified in the 'demo' object. Valid values "
-                + "are: ['13-17', '18+']",
-                status_code=400,
-            )
-        if (
-            api.config.get_settings()["email"]["parent_verification_email"]
-            and req["demo"]["age"] != "18+"
-            and (
-                "parentemail" not in req["demo"]
-                or not re.match(r".+@.+\..{2,}", req["demo"]["parentemail"])
-            )
-        ):
-            raise PicoException(
-                "Must provide a valid parent email address under the key "
-                + "'demo.parentemail'.",
-                status_code=400,
-            )
-        accepted_genders = ["male", "female", "nb/gf", "nl/no"]
-        if "gender" in req["demo"] and req["demo"]["gender"] not in accepted_genders:
-            raise PicoException(
-                f"'demo.gender' must be one of: {str(accepted_genders)}", 400
-            )
         if not all(
             [
                 c in string.digits + string.ascii_lowercase
@@ -68,9 +44,6 @@ class UserList(Resource):
             ]
         ):
             raise PicoException("Usernames must be alphanumeric.", status_code=400)
-
-        # Clean up input data
-        req["affiliation"] = req["affiliation"].strip()
 
         # Attempt to create the user
         uid = api.user.add_user(req)

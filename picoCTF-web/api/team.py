@@ -274,8 +274,6 @@ def get_team_information(tid):
             "email": member["email"],
             "uid": member["uid"],
             "affiliation": member.get("affiliation", "None"),
-            "country": member["country"],
-            "usertype": member["usertype"],
             "can_leave": api.user.can_leave_team(member["uid"]),
         }
         for member in get_team_members(tid=tid, show_disabled=False)

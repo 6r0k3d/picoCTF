@@ -518,40 +518,6 @@ user_req.add_argument(
     error="Password is not valid (must be at least 3 characters)",
 )
 user_req.add_argument(
-    "affiliation",
-    required=True,
-    type=length_restricted(3, 50, str),
-    location="json",
-    help="e.g. school or organization",
-    error="School or organization name is not valid (must be 3-50 characters)",
-)
-user_req.add_argument(
-    "usertype",
-    required=True,
-    type=str,
-    choices=["student", "college", "teacher", "other"],
-    location="json",
-    help="User type",
-    error="Invalid user type",
-)
-user_req.add_argument(
-    "country",
-    required=True,
-    type=length_restricted(2, 2, str),
-    location="json",
-    help="2-letter country code",
-    error="Country is invalid (must be 2-letter country code)",
-)
-# @TODO validate nested fields
-user_req.add_argument(
-    "demo",
-    required=True,
-    type=object_type,
-    location="json",
-    help="Demographic information (parentemail, age)",
-    error="Demographics fields are required",
-)
-user_req.add_argument(
     "gid",
     required=False,
     type=str,
