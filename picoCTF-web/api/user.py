@@ -284,7 +284,7 @@ def add_user(params, batch_registration=False):
 
     # If gid was specified, add the newly created team to the group
     if params.get("gid", None):
-        api.group.join_group(params["gid"], tid, teacher=join_group_as_teacher)
+        api.group.join_group(params["gid"], tid)
 
     # If email verification is enabled and user wasn't invited, send
     # validation email
@@ -292,20 +292,6 @@ def add_user(params, batch_registration=False):
         api.email.send_user_verification_email(params["username"])
 
     return uid
-
-
-def is_teacher(uid=None):
-    """
-    Determine if a user is a teacher.
-
-    Args:
-        uid: user's uid
-    Returns:
-        True if the user is a teacher, False otherwise
-    """
-    user = get_user(uid=uid)
-    return user.get("teacher", False)
-
 
 def verify_user(uid, token_value):
     """

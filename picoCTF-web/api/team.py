@@ -96,8 +96,8 @@ def get_groups(tid):
     db = api.db.get_conn()
     associated_groups = list(
         db.groups.find(
-            {"$or": [{"owner": tid}, {"teachers": tid}, {"members": tid}]},
-            {"name": 1, "gid": 1, "owner": 1, "teachers": 1, "members": 1, "_id": 0},
+            {"$or": [{"owner": tid}, {"members": tid}]},
+            {"name": 1, "gid": 1, "owner": 1, "members": 1, "_id": 0},
         )
     )
 
@@ -220,8 +220,6 @@ def get_team_members(tid=None, name=None, show_disabled=True):
                 "lastname": 1,
                 "disabled": 1,
                 "email": 1,
-                "teacher": 1,
-                "country": 1,
                 "usertype": 1,
             },
         )
@@ -407,7 +405,6 @@ def join_team(team_name, password, user):
         # email filter is not enabled.
         if (
             desired_team["tid"] not in group["members"]
-            and desired_team["tid"] not in group["teachers"]
         ):
             group_settings = api.group.get_group_settings(gid=group["gid"])
             if not group_settings["email_filter"]:
@@ -467,21 +464,6 @@ def update_password_request(params):
         {"tid": user["tid"]},
         {"$set": {"password": api.common.hash_password(params["new-password"])}},
     )
-
-
-def is_teacher_team(tid):
-    """Check if team is a teacher's self-team."""
-    team = get_team(tid=tid)
-    members = get_team_members(tid=tid)
-    if (
-        team["size"] == 1
-        and members[0]["username"] == team["team_name"]
-        and members[0]["teacher"]
-    ):
-        return True
-    else:
-        return False
-
 
 @log_action
 def delete_team(tid):

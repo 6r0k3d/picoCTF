@@ -165,8 +165,7 @@ class TeamJoinResponse(Resource):
     def post(self):
         """Join a team by providing its name and password."""
         current_user = api.user.get_user()
-        if current_user["teacher"]:
-            raise PicoException("Teachers may not join teams!", 403)
+
         req = team_change_req.parse_args(strict=True)
 
         req["team_name"] = req["team_name"].strip()

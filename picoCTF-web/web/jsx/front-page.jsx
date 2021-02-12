@@ -375,9 +375,7 @@ const AuthPanel = React.createClass({
             .done(loginData => {
               apiCall("GET", "/api/v1/user")
                 .done(userData => {
-                  if (userData.teacher) {
-                    apiNotify(successAlert, "/classroom");
-                  } else if (this.state.settings.max_team_size > 1) {
+                  if (this.state.settings.max_team_size > 1) {
                     apiNotify(successAlert);
                     this.setPage("Team Management");
                   } else {
@@ -427,14 +425,12 @@ const AuthPanel = React.createClass({
         apiCall("GET", "/api/v1/user").done(data => {
           if (document.location.hash === "#team-builder" && !data.teacher) {
             this.setPage("Team Management");
-          } else {
-            if (data.teacher) {
-              document.location.href = "/classroom";
-            } else {
-              document.location.href = "/profile";
-            }
           }
-        })
+          else {
+              document.location.href = "/profile";
+           }
+          }
+        )
       )
       .fail(jqXHR =>
         apiNotify({ status: 0, message: jqXHR.responseJSON.message })
