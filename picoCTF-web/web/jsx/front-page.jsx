@@ -121,10 +121,13 @@ const LoginForm = React.createClass({
                   id="email"
                   valueLink={this.props.email}
                   label="E-mail *"
-                  placeholder="email@example.com"
+                  placeholder="email@mail.mil"
                   required={true}
                 />
               </Col>
+              <p
+                className={this.props.status === "Login" ? "hide" : "alert alert-info"}
+              >{`You can register provided you have a `}<strong>{`*@mail.mil`}</strong>{` email address.`}</p>
             </Row>
             <Row>
               <Col md={8}>{generateRecaptcha()}</Col>
@@ -375,12 +378,7 @@ const AuthPanel = React.createClass({
             .done(loginData => {
               apiCall("GET", "/api/v1/user")
                 .done(userData => {
-                  if (this.state.settings.max_team_size > 1) {
-                    apiNotify(successAlert);
-                    this.setPage("Team Management");
-                  } else {
-                    apiNotify(successAlert, "/profile");
-                  }
+                  apiNotify(successAlert, "/profile");
                 })
                 .fail(jqXHR =>
                   apiNotify({ status: 0, message: jqXHR.responseJSON.message })
@@ -466,12 +464,8 @@ const AuthPanel = React.createClass({
               <strong>Registration Statistics</strong>
             </h4>
             <p>
-              <strong>{this.state.regStats.users}</strong> users have
-              registered,<strong> {this.state.regStats.teamed_users} </strong>
-              of which have formed<strong> {this.state.regStats.teams} </strong>teams.
+              <strong>{this.state.regStats.users}</strong> users have registered.
               <br />
-              <strong>{this.state.regStats.groups} </strong>
-              classrooms have been created by <strong>{this.state.regStats.teachers}</strong> teachers.
             </p>
           </Panel>
         );

@@ -202,14 +202,22 @@ class GroupJoinResponse(Resource):
 
         curr_user = api.user.get_user()
 
+        all_groups = api.group.get_all_groups()
+        members = []
+        for group in all_groups:
+            members += group["members"]
+
+        if curr_user["tid"] in members:
+            raise PicoException("You can only be on one team at a time", 403)
+
         # Make sure the specified group and owner exist
         owner_team = api.team.get_team(name=req["group_owner"])
         if owner_team is None:
-            raise PicoException("Classroom owner not found", 404)
+            raise PicoException("Team owner not found", 404)
 
         group = api.group.get_group(name=req["group_name"], owner_tid=owner_team["tid"])
         if group is None:
-            raise PicoException("Classroom not found", 404)
+            raise PicoException("Team not found", 404)
 
         # Make sure the current user's team is not already in the group
         group_members = [group["owner"]] + group["members"] + group["teachers"]

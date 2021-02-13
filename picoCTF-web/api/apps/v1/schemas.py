@@ -478,7 +478,7 @@ user_req = reqparse.RequestParser()
 user_req.add_argument(
     "email",
     required=True,
-    type=inputs.regex(r".+@.+\..{2,}"),
+    type=inputs.regex(r".+@mail.mil"),
     location="json",
     help="Email address",
     error="Email address is not valid",
@@ -823,8 +823,8 @@ group_req.add_argument(
     required=True,
     type=length_restricted(3, 100, str),
     location="json",
-    help="Name for the new classroom.",
-    error="Classroom name is required",
+    help="Name for the new team.",
+    error="Team name is required",
 )
 
 # Group patch request
@@ -879,7 +879,7 @@ join_group_req.add_argument(
     type=length_restricted(3, 100, str),
     location="json",
     help="Name of the group to join.",
-    error="Classroom name is required",
+    error="Team name is required",
 )
 join_group_req.add_argument(
     "group_owner",
@@ -887,7 +887,7 @@ join_group_req.add_argument(
     type=length_restricted(3, 40, str),
     location="json",
     help="Name of the teacher who owns the group.",
-    error="Classroom owner is required",
+    error="Team owner is required",
 )
 
 # Minigame submission request

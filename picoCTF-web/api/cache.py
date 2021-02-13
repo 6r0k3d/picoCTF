@@ -109,7 +109,7 @@ def _hash_key(a, k):
 
 def get_scoreboard_key(team):
     # For lack of better idea of delimiter, use '>' illegal team name char
-    return "{}>{}>{}".format(team["team_name"], team["affiliation"], team["tid"])
+    return "{}>{}".format(team["team_name"], team["tid"])
 
 
 def decode_scoreboard_item(item, with_weight=False, include_key=False):
@@ -124,7 +124,7 @@ def decode_scoreboard_item(item, with_weight=False, include_key=False):
     score = item[1]
     if not with_weight:
         score = int(score)
-    output = {"name": data[0], "affiliation": data[1], "tid": data[2], "score": score}
+    output = {"name": data[0], "tid": data[1], "score": score}
     if include_key:
         output["key"] = key
     return output

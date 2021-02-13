@@ -333,7 +333,6 @@ def get_top_teams_score_progressions(limit=5, scoreboard_id=None, group_id=None)
         data = decode_scoreboard_item(item)
         return {
             "name": data["name"],
-            "affiliation": data["affiliation"],
             "score_progression": get_score_progression(tid=data["tid"]),
         }
 

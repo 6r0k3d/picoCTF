@@ -11,7 +11,7 @@ from api import (
     PicoException,
     rate_limit,
     require_login,
-    require_teacher,
+    require_admin,
 )
 from bs4 import UnicodeDammit
 from flask import jsonify
@@ -53,7 +53,7 @@ class GroupList(Resource):
         return jsonify(api.team.get_groups(curr_tid))
 
     @check_csrf
-    @require_teacher
+    @require_admin
     @rate_limit(limit=20, duration=10)
     @ns.response(201, "Classroom added")
     @ns.response(400, "Error parsing request")

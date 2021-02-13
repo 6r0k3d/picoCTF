@@ -376,7 +376,6 @@ Also, to avoid confusion on the scoreboard, you may not create a team that share
 const LoadHTBTwoFactor = React.createClass({
 
   getInitialState() {
-    console.log("getting state");
     return {
       token: ""
     };
@@ -385,8 +384,6 @@ const LoadHTBTwoFactor = React.createClass({
   componentWillMount() {
 
     apiCall("GET", "/api/v1/user/htb_token").done(data => {
-        console.log(typeof(data));
-        console.log(data);
         this.setState({token: data});
       })
      .fail(jqXHR =>
@@ -417,11 +414,11 @@ const load_group_info = () =>
     .fail(jqXHR =>
       apiNotify({ status: 0, message: jqXHR.responseJSON.message })
     )
-    .done(function(data) {
+    .done(function (data) {
       $("#group-info").html(renderGroupInformation({ data }));
 
-      $("#join-group").on("click", group_request);
-      $("#group-request-form").on("submit", join_group_request);
+      $("#join-group").on("click", join_group_request);
+      //$("#group-request-form").on("submit", join_group_request);
       $(".leave-group-span").on("click", e =>
         leave_group($(e.target).data("gid"))
       );
@@ -431,7 +428,7 @@ const join_group = function(group_name, group_owner) {
   const data = { group_name: group_name, group_owner: group_owner };
   apiCall("POST", "/api/v1/team/join_group", data, "Group", "JoinGroup")
     .done(function(data) {
-      apiNotify({ status: 1, message: "Successfully joined classroom" });
+      apiNotify({ status: 1, message: "Successfully joined Team" });
       load_group_info();
     })
     .fail(jqXHR =>
@@ -455,25 +452,11 @@ const leave_group = gid =>
       apiNotify({ status: 0, message: jqXHR.responseJSON.message })
     );
 
-const group_request = function(e) {
-  e.preventDefault();
-  const form = $(this).closest("form");
-  confirmDialog(
-    "By joining a class you are allowing the instructor to see statistics concerning your team's performance, " +
-    "as well as information on your team members such as username and email. Are you sure you want to join this class?",
-    "Class Confirmation",
-    "Join",
-    "Cancel",
-    e => form.trigger("submit"),
-    e => gtag('event', 'JoinGroup', { 'event_category': 'Group', 'event_label': 'RejectPrompt' })
-  );
-};
-
 const join_group_request = function(e) {
   e.preventDefault();
 
   const group_name = $("#group-name-input").val();
-  const group_owner = $("#group-owner-input").val();
+  const group_owner = "ctfadmin";
   join_group(group_name, group_owner);
 };
 
@@ -489,15 +472,11 @@ $(function() {
   $("#disable-account-form").on("submit", disableAccount);
   $("#download-data-form").on("submit", downloadData);
 
-  console.log('hello');
   ReactDOM.render(
     <LoadHTBTwoFactor />,
     document.getElementById("htb-two-factor")
   );
-  ReactDOM.render(
-    <TeamManagementForm />,
-    document.getElementById("team-management")
-  );
+
   addAjaxListener("isTeacher", "/api/v1/user", function (data) {
     window.isTeacher = data.teacher;
     window.username = data.username;
