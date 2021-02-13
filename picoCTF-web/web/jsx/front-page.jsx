@@ -125,10 +125,10 @@ const LoginForm = React.createClass({
                   required={true}
                 />
               </Col>
-              <p
-                className={this.props.status === "Login" ? "hide" : "alert alert-info"}
-              >{`You can register provided you have a `}<strong>{`*@mail.mil`}</strong>{` email address.`}</p>
             </Row>
+            <p
+              className={this.props.status === "Login" ? "hide" : "alert alert-info"}
+            >{`You can register provided you have a `}<strong>{`*@mail.mil`}</strong>{` email address.`}</p>
             <Row>
               <Col md={8}>{generateRecaptcha()}</Col>
               <Col md={4} className="text-right">
