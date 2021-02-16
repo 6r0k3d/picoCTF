@@ -35,6 +35,8 @@ std_src_dirs:
   - "{{ pico_base_dir }}/problems/examples/binary-exploitation/buffer-overflow-1"
   - "{{ pico_base_dir }}/problems/examples/cryptography/ecb-1"
   - "{{ pico_base_dir }}/problems/examples/web-exploitation/sql-injection-1"
+  - "{{ pico_base_dir }}/problems/ctf-problems/recon"
+  - "{{ pico_base_dir }}/problems/ctf-problems/htb/tutorial"
 docker_src_dirs:
   - "{{ pico_base_dir }}/problems/examples/on-demand"
 
